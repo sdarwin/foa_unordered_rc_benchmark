@@ -95,7 +95,7 @@ jobs:
         include:
           - compiler: cl
             architecture: x64
-            sourcefile: running_insertion.cpp
+            sourcefile: scattered_lookup.cpp
             compileroptions: /std:c++latest /O2 /D "NDEBUG" /D "HAVE_ABSEIL" /EHsc /MD /Fe:benchmark.exe
             outputfile: benchmark.exe            
             reportdir: vs-x64
