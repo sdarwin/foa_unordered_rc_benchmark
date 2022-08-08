@@ -29,6 +29,7 @@ jobs:
             compileroptions: -std=c++2a -O3 -DNDEBUG -DHAVE_ABSEIL
             outputfile: benchmark
             reportdir: clang-m64
+            os: ubuntu-20.04
             
     runs-on: ${{matrix.os}}
 
