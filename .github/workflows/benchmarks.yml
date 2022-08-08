@@ -127,7 +127,7 @@ jobs:
         run: |
           cd %GITHUB_WORKSPACE%
           git clone -b feature/foa_rc https://github.com/joaquintides/fxa_unordered fxa_unordered-root
-     - name: Compile
+      - name: Compile
         shell: cmd
         run: |
           cd %GITHUB_WORKSPACE%
