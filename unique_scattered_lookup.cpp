@@ -125,7 +125,7 @@ void test(
   const char* title,
   const char* name1,const char* name2,const char* name3)
 {
-  unsigned int n0=10000,n1=3000000,dn=500;
+  unsigned int n0=10000,n1=6000000,dn=500;
   double       fdn=1.05;
 
   std::cout<<title<<":"<<std::endl;
