@@ -115,7 +115,7 @@ jobs:
           git submodule update --init
           cmd /c bootstrap.bat
           .\b2.exe -d0 headers
-       - name: Install Abseil
+      - name: Install Abseil
         run: |
           cd %GITHUB_WORKSPACE%
           git clone -b lts_2022_06_23 https://github.com/abseil/abseil-cpp.git abseil-root
