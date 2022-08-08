@@ -116,14 +116,17 @@ jobs:
           cmd /c bootstrap.bat
           .\b2.exe -d0 headers
       - name: Install Abseil
+        shell: cmd
         run: |
           cd %GITHUB_WORKSPACE%
           git clone -b lts_2022_06_23 https://github.com/abseil/abseil-cpp.git abseil-root
       - name: Install fastrange
+        shell: cmd
         run: |
           cd %GITHUB_WORKSPACE%
           git clone https://github.com/lemire/fastrange.git fastrange-root
       - name: Install fxa_unordered
+        shell: cmd
         run: |
           cd %GITHUB_WORKSPACE%
           git clone -b feature/foa_rc https://github.com/joaquintides/fxa_unordered fxa_unordered-root
