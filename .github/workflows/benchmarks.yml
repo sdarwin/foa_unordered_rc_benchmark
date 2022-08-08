@@ -19,11 +19,16 @@ jobs:
             sourcefile: unique_scattered_lookup.cpp
             compileroptions: -std=c++2a -O3 -DNDEBUG -DHAVE_ABSEIL
             outputfile: benchmark
-            reportdir: gcc
+            reportdir: gcc-m64
             os: ubuntu-20.04
             install: g++-11
             command: sudo cset shield --exec -- nice -n -20 sudo -u gha ./benchmark
-            
+          - compiler: clang++-12
+            architecture: -m64
+            sourcefile: unique_scattered_lookup.cpp
+            compileroptions: -std=c++2a -O3 -DNDEBUG -DHAVE_ABSEIL
+            outputfile: benchmark
+            reportdir: clang-m64
     runs-on: ${{matrix.os}}
 
     steps:
