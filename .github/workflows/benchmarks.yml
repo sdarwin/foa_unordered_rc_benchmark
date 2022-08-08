@@ -30,7 +30,8 @@ jobs:
             outputfile: benchmark
             reportdir: clang-m64
             os: ubuntu-20.04
-            
+            command: sudo cset shield --exec -- nice -n -20 sudo -u gha ./benchmark
+                        
     runs-on: ${{matrix.os}}
 
     steps:
