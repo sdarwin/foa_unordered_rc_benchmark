@@ -87,3 +87,73 @@ jobs:
           git add ${REPORT_FILE}
           git commit -m "updated benchmark results"
           git push
+
+  windows:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - compiler: cl
+            architecture: x64
+            sourcefile: running_insertion.cpp
+            compileroptions: /std:c++latest /O2 /D "NDEBUG" /D "HAVE_ABSEIL" /EHsc /MD /Fe:benchmark.exe
+            outputfile: benchmark.exe            
+            reportdir: vs-x64
+            os: windows-2019
+
+    runs-on: ${{matrix.os}}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Boost
+        shell: cmd
+        run: |
+          cd %GITHUB_WORKSPACE%
+          git clone https://github.com/boostorg/boost.git boost-root
+          cd boost-root
+          git checkout boost-1.80.0.beta1
+          git submodule update --init
+          cmd /c bootstrap.bat
+          .\b2.exe -d0 headers
+       - name: Install Abseil
+        run: |
+          cd %GITHUB_WORKSPACE%
+          git clone -b lts_2022_06_23 https://github.com/abseil/abseil-cpp.git abseil-root
+      - name: Install fastrange
+        run: |
+          cd %GITHUB_WORKSPACE%
+          git clone https://github.com/lemire/fastrange.git fastrange-root
+      - name: Install fxa_unordered
+        run: |
+          cd %GITHUB_WORKSPACE%
+          git clone -b feature/foa_rc https://github.com/joaquintides/fxa_unordered fxa_unordered-root
+     - name: Compile
+        shell: cmd
+        run: |
+          cd %GITHUB_WORKSPACE%
+          # call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{matrix.architecture}}
+          call "C:\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" ${{matrix.architecture}}
+          set INCLUDE=%INCLUDE%;%GITHUB_WORKSPACE%\boost-root;GITHUB_WORKSPACE%\abseil-root;GITHUB_WORKSPACE%\fastrange-root;GITHUB_WORKSPACE%\fxa_unordered-root
+          echo %INCLUDE%
+          ${{matrix.compiler}} ${{matrix.sourcefile}} ${{matrix.compileroptions}}
+      - name: Set reportfile name
+        shell: powershell
+        run: |
+          echo "REPORT_FILE=${{matrix.reportdir}}\${{matrix.sourcefile}}.csv" >> $env:GITHUB_ENV
+      - name: Run benchmark
+        shell: powershell
+        run: |
+          echo "running benchmarks and saving to $env:REPORT_FILE"
+          ./${{matrix.outputfile}} | tee $env:REPORT_FILE
+      - name: Push benchmark results to repo
+        shell: powershell
+        run: |
+          git config --global user.name 'joaquintides'
+          git config --global user.email 'joaquintides@users.noreply.github.com'
+          git add $env:REPORT_FILE
+          git stash -- $env:REPORT_FILE
+          git pull
+          git stash pop
+          git add $env:REPORT_FILE
+          git commit -m "updated benchmark results"
+          git push
