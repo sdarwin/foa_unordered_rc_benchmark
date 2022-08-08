@@ -17,7 +17,7 @@ jobs:
           - compiler: g++-11
             architecture: -m64
             sourcefile: unique_scattered_lookup.cpp
-            compileroptions: -std=c++2a -O3 -DNDEBUG
+            compileroptions: -std=c++2a -O3 -DNDEBUG -DHAVE_ABSEIL
             outputfile: benchmark
             reportdir: gcc
             os: ubuntu-20.04
